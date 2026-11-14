@@ -210,11 +210,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="track"><div class="fill new" data-w="100"></div></div>
     </div>
     <div class="row">
-      <div class="row-top"><span lang="zh">举例：作者电脑实际显示</span><span lang="en">Example: author's machine</span><b style="color:var(--ink-3)">828K</b></div>
+      <div class="row-top"><span lang="zh">实际看到大约</span><span lang="en">What you'll actually see: about</span><b style="color:var(--ink-3)">828K</b></div>
       <div class="track"><div class="fill api" data-w="82.8"></div></div>
     </div>
     <div class="gain"><strong>≈2×</strong><span lang="zh">上下文最多翻倍左右，能读更大的项目，聊更久不断片</span><span lang="en">Roughly double the context: bigger projects, longer sessions</span></div>
-    <p class="footnote"><sup>*</sup> <span lang="zh">1M 是写入的设置值。实际显示通常会低一些：Codex 会按 OpenAI 给你的账号和版本下发的上限截断（作者电脑上是 872K），界面只显示其中约 95%；系统指令、插件、Skills 等还会先占用一部分。每个人看到的数字不同，以你的 AI 调整后告诉你的结果为准。</span><span lang="en">1M is the value written to your config. What you see is usually lower: Codex clamps it to the cap OpenAI sets for your account and version (872K on the author's machine), shows about 95% of that, and system instructions, plugins and skills take up part of it. Your number will differ; your AI tells you the real result.</span></p>
+    <p class="footnote"><sup>*</sup> <span lang="zh">1M 是写入的设置值。实际显示通常会低一些：Codex 会按 OpenAI 给你的账号和版本下发的上限截断（目前常见的是 872K），界面只显示其中约 95%；系统指令、插件、Skills 等还会先占用一部分。每个人看到的数字不同，以你的 AI 调整后告诉你的结果为准。</span><span lang="en">1M is the value written to your config. What you see is usually lower: Codex clamps it to the cap OpenAI sets for your account and version (commonly 872K today), shows about 95% of that, and system instructions, plugins and skills take up part of it. Your number will differ; your AI tells you the real result.</span></p>
   </div>
 </div>
 
@@ -277,7 +277,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="section-lead"><span lang="zh">这项设置对 Codex 里的所有模型都生效。默认只给 272K 的模型，提升最明显。</span><span lang="en">The setting applies to every model in Codex. Models that default to 272K gain the most.</span></p>
     <div class="card tbl">
       <table>
-        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">作者实测</span><span lang="en">Author's test</span></th></tr></thead>
+        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">实际看到大约</span><span lang="en">Actually see: about</span></th></tr></thead>
         <tbody>
           <tr><td><b>GPT-6.1</b><span class="variants">Sol · Terra</span></td><td class="num">475K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
           <tr><td><b>GPT-6</b><span class="variants">Astra · Sol · Luna</span></td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
@@ -285,7 +285,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         </tbody>
       </table>
     </div>
-    <p class="tbl-note"><span lang="zh">* 实际显示因人而异：OpenAI 给不同账号和 Codex 版本下发的上限不同，界面只显示其中约 95%，插件、Skills、系统指令等也会占用一部分。作者电脑上（2026 年 11 月 14 日）这些模型的上限都是 872K，所以显示 828K。换模型不用重新设置；以后 OpenAI 调整上限，再让 AI 调一次就行。</span><span lang="en">* Your number will vary: OpenAI sets different caps per account and Codex version, the app shows about 95% of the cap, and plugins, skills and system instructions take up part of it. On the author's machine (14 November 2026) every model was capped at 872K, so it showed 828K. No need to redo it when you switch models; if OpenAI changes the caps, just ask your AI again.</span></p>
+    <p class="tbl-note"><span lang="zh">* 实际显示因人而异：OpenAI 给不同账号和 Codex 版本下发的上限不同，界面只显示其中约 95%，插件、Skills、系统指令等也会占用一部分。以 2026 年 11 月 14 日的模型列表为例，这些模型的上限都是 872K，实际看到大约 828K。换模型不用重新设置；以后 OpenAI 调整上限，再让 AI 调一次就行。</span><span lang="en">* Your number will vary: OpenAI sets different caps per account and Codex version, the app shows about 95% of the cap, and plugins, skills and system instructions take up part of it. In the model list from 14 November 2026, every model here was capped at 872K, so you actually see about 828K. No need to redo it when you switch models; if OpenAI changes the caps, just ask your AI again.</span></p>
   </div>
 </section>
 
@@ -406,7 +406,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div>
       <details>
         <summary><span lang="zh">为什么我看到的不到 1M？</span><span lang="en">Why do I see less than 1M?</span></summary>
-        <p><span lang="zh">Skill 写入的是 1M，但 Codex 会按 OpenAI 给你的账号和版本下发的模型上限截断（作者电脑上是 872K），界面上还会留出约 5% 的余量，所以作者看到的是约 828K。不同账号、不同版本的上限可能不同，你看到的数字也可能不同。以后 OpenAI 放宽上限，再让 AI 调一次就行。</span><span lang="en">The skill writes 1M, but Codex clamps it to the cap OpenAI sets for your account and version (872K on the author's machine) and keeps about 5% in reserve, so the author sees about 828K. Caps can differ between accounts and versions, so your number may differ too. If OpenAI raises the cap, just ask your AI to run it again.</span></p>
+        <p><span lang="zh">Skill 写入的是 1M，但 Codex 会按 OpenAI 给你的账号和版本下发的模型上限截断（目前常见的是 872K），界面上还会留出约 5% 的余量，所以实际看到大约 828K。不同账号、不同版本的上限可能不同，你看到的数字也可能不同。以后 OpenAI 放宽上限，再让 AI 调一次就行。</span><span lang="en">The skill writes 1M, but Codex clamps it to the cap OpenAI sets for your account and version (commonly 872K today) and keeps about 5% in reserve, so you actually see about 828K. Caps can differ between accounts and versions, so your number may differ too. If OpenAI raises the cap, just ask your AI to run it again.</span></p>
       </details>
       <details>
         <summary><span lang="zh">ChatGPT 网页版能用吗？</span><span lang="en">Does it work for ChatGPT on the web?</span></summary>
