@@ -65,6 +65,32 @@ h1 .num{color:var(--accent);white-space:nowrap}
 .fill.api{background:repeating-linear-gradient(45deg,var(--line) 0 6px,transparent 6px 12px);border:1px dashed var(--ink-3)}
 .gain{display:flex;align-items:center;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line);font-size:14px;color:var(--ink-2)}
 .gain strong{font-size:28px;color:var(--accent);font-weight:750}
+.footnote{font-size:12.5px;line-height:1.6;color:var(--ink-3);margin:14px 0 0}
+.row-top sup,.footnote sup{font-size:.7em}
+.warn-card{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border:1px solid color-mix(in srgb,var(--warn) 45%,var(--line));background:color-mix(in srgb,var(--warn) 9%,var(--surface))}
+.warn-card .ico{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn);font-weight:800}
+.warn-card h3{margin:0 0 4px;font-size:17px}
+.warn-card p{margin:0;color:var(--ink-2);font-size:15px}
+.warn-card a{color:var(--warn);font-weight:600;white-space:nowrap}
+.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.cost-grid .card{padding:22px}
+.cost-grid h3{margin:0 0 8px;font-size:17px}
+.cost-grid p,.cost-grid li{color:var(--ink-2);font-size:15px}
+.cost-grid p{margin:0 0 10px}
+.cost-grid ul{margin:0;padding-left:20px}
+.cost-grid li{margin:5px 0}
+.tag{display:inline-block;font-size:12px;font-weight:650;padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.tag.ok{background:var(--accent-soft);color:var(--accent)}
+.tag.bad{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.example{margin-top:16px;padding:18px 20px}
+.example h3{margin:0 0 8px;font-size:16px}
+.example p{margin:0 0 8px;color:var(--ink-2);font-size:15px}
+.example p:last-child{margin:0}
+.mech{padding:22px;margin-bottom:16px}
+.mech h3{margin:0 0 8px;font-size:17px}
+.mech p{margin:0;color:var(--ink-2)}
+.sources{font-size:13px;color:var(--ink-3);margin:16px 2px 0}
+.sources a{color:var(--accent)}
 section{padding:56px 0}
 h2{font-size:28px;letter-spacing:-.01em;margin:0 0 8px}
 .section-lead{color:var(--ink-2);margin:0 0 28px}
@@ -110,7 +136,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .toast.show{opacity:1;transform:translateX(-50%)}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;padding-top:44px;gap:32px}
-  .steps,.apps{grid-template-columns:1fr}
+  .steps,.apps,.cost-grid{grid-template-columns:1fr}
   .feat{grid-template-columns:1fr 1fr}
 }
 @media (max-width:520px){
@@ -120,6 +146,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .lead{font-size:16px}
   .cta-band{padding:28px 18px}
   th,td{padding:10px 10px}
+  td.num,th.num{white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){.fill{transition:none}}
 </style>
@@ -146,12 +173,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div>
     <span class="eyebrow"><span lang="zh">Codex · 所有模型适用</span><span lang="en">Codex · Every model</span></span>
     <h1>
-      <span lang="zh">一个 Skill，Codex 上下文从 475K 到 <span class="num">828K</span></span>
-      <span lang="en">One skill takes Codex from 475K to <span class="num">828K</span> context</span>
+      <span lang="zh">一个 Skill，Codex 上下文最高开到 <span class="num">1M</span></span>
+      <span lang="en">One skill unlocks up to <span class="num">1M</span> context in Codex</span>
     </h1>
     <p class="lead">
-      <span lang="zh">Sol 本身支持 1M 上下文，Codex 默认只给一半左右。不用懂技术，把下面这句话发给你的 AI，它会自己装好 Skill 并帮你调到最大。</span>
-      <span lang="en">Sol supports a 1M context, but Codex only gives you about half by default. No technical steps: send the message below to your AI, and it installs the skill and raises the limit for you.</span>
+      <span lang="zh">模型本身支持 1M 上下文，Codex 默认只给一半左右。不用懂技术，把下面这句话发给你的 AI，它会自己装好 Skill 并帮你调到最大。</span>
+      <span lang="en">The models support a 1M context, but Codex only gives you about half by default. No technical steps: send the message below to your AI, and it installs the skill and raises the limit for you.</span>
     </p>
 
     <div class="card prompt">
@@ -179,14 +206,26 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="track"><div class="fill old" data-w="47.5"></div></div>
     </div>
     <div class="row">
-      <div class="row-top"><span lang="zh">装上 Skill 之后</span><span lang="en">With the skill</span><b style="color:var(--accent)">828K</b></div>
-      <div class="track"><div class="fill new" data-w="82.8"></div></div>
+      <div class="row-top"><span lang="zh">装上 Skill 之后</span><span lang="en">With the skill</span><b style="color:var(--accent)"><span lang="zh">最高 </span><span lang="en">up to </span>1M<sup>*</sup></b></div>
+      <div class="track"><div class="fill new" data-w="100"></div></div>
     </div>
     <div class="row">
-      <div class="row-top"><span lang="zh">模型理论上限</span><span lang="en">Model ceiling</span><b style="color:var(--ink-3)">1M</b></div>
-      <div class="track"><div class="fill api" data-w="100"></div></div>
+      <div class="row-top"><span lang="zh">举例：作者电脑实际显示</span><span lang="en">Example: author's machine</span><b style="color:var(--ink-3)">828K</b></div>
+      <div class="track"><div class="fill api" data-w="82.8"></div></div>
     </div>
-    <div class="gain"><strong>+74%</strong><span lang="zh">多出约 35 万 tokens，能读更大的项目，聊更久不断片</span><span lang="en">About 350K more tokens: bigger projects, longer sessions</span></div>
+    <div class="gain"><strong>≈2×</strong><span lang="zh">上下文最多翻倍左右，能读更大的项目，聊更久不断片</span><span lang="en">Roughly double the context: bigger projects, longer sessions</span></div>
+    <p class="footnote"><sup>*</sup> <span lang="zh">1M 是写入的设置值。实际显示通常会低一些：Codex 会按 OpenAI 给你的账号和版本下发的上限截断（作者电脑上是 872K），界面只显示其中约 95%；系统指令、插件、Skills 等还会先占用一部分。每个人看到的数字不同，以你的 AI 调整后告诉你的结果为准。</span><span lang="en">1M is the value written to your config. What you see is usually lower: Codex clamps it to the cap OpenAI sets for your account and version (872K on the author's machine), shows about 95% of that, and system instructions, plugins and skills take up part of it. Your number will differ; your AI tells you the real result.</span></p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="card warn-card" role="note">
+    <span class="ico">!</span>
+    <div>
+      <h3><span lang="zh">注意：装上后，额度会扣得更快</span><span lang="en">Heads-up: your usage will run down faster</span></h3>
+      <p><span lang="zh">上下文变大后，对话可以变得更长，而对话越长，每条消息消耗的额度越多。用 API Key 的话，单次输入超过 272K 还会整次加价。</span><span lang="en">With a bigger window, conversations can grow longer, and longer conversations use more per message. With an API key, requests over 272K input tokens are also billed at a higher rate.</span>
+        <a href="#cost"><span lang="zh">看官方计费规则和利弊 →</span><span lang="en">See official billing and trade-offs →</span></a></p>
+    </div>
   </div>
 </div>
 
@@ -238,15 +277,113 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="section-lead"><span lang="zh">这项设置对 Codex 里的所有模型都生效。默认只给 272K 的模型，提升最明显。</span><span lang="en">The setting applies to every model in Codex. Models that default to 272K gain the most.</span></p>
     <div class="card tbl">
       <table>
-        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">提升</span><span lang="en">Gain</span></th></tr></thead>
+        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">作者实测</span><span lang="en">Author's test</span></th></tr></thead>
         <tbody>
-          <tr><td><b>GPT-6.1</b><span class="variants">Sol · Terra</span></td><td class="num">475K</td><td class="num up">828K</td><td class="num up">+74%</td></tr>
-          <tr><td><b>GPT-6</b><span class="variants">Astra · Sol · Luna</span></td><td class="num">258K</td><td class="num up">828K</td><td class="num up">3.2×</td></tr>
-          <tr><td><b>GPT-5.6</b><span class="variants">Sol · Terra · Luna</span></td><td class="num">258K</td><td class="num up">828K</td><td class="num up">3.2×</td></tr>
+          <tr><td><b>GPT-6.1</b><span class="variants">Sol · Terra</span></td><td class="num">475K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
+          <tr><td><b>GPT-6</b><span class="variants">Astra · Sol · Luna</span></td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
+          <tr><td><b>GPT-5.6</b><span class="variants">Sol · Terra · Luna</span></td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="tbl-note"><span lang="zh">数据来自 2026 年 11 月 14 日 Codex 下发的模型列表：这些模型在 Codex 里的上限都是 872K，界面显示其中 95%。换模型不用重新设置，以后 OpenAI 调整上限，再让 AI 调一次就行。</span><span lang="en">From the model list Codex shipped on 14 November 2026: every model here is capped at 872K in Codex, and the app shows 95% of that. No need to redo it when you switch models; if OpenAI changes the caps, just ask your AI again.</span></p>
+    <p class="tbl-note"><span lang="zh">* 实际显示因人而异：OpenAI 给不同账号和 Codex 版本下发的上限不同，界面只显示其中约 95%，插件、Skills、系统指令等也会占用一部分。作者电脑上（2026 年 11 月 14 日）这些模型的上限都是 872K，所以显示 828K。换模型不用重新设置；以后 OpenAI 调整上限，再让 AI 调一次就行。</span><span lang="en">* Your number will vary: OpenAI sets different caps per account and Codex version, the app shows about 95% of the cap, and plugins, skills and system instructions take up part of it. On the author's machine (14 November 2026) every model was capped at 872K, so it showed 828K. No need to redo it when you switch models; if OpenAI changes the caps, just ask your AI again.</span></p>
+  </div>
+</section>
+
+<section id="cost">
+  <div class="wrap">
+    <h2><span lang="zh">额度会扣得更快：官方怎么计费</span><span lang="en">Usage runs down faster: how OpenAI bills it</span></h2>
+    <p class="section-lead"><span lang="zh">先说结论：上下文开大这件事本身不花钱，花钱的是对话真的变长了。</span><span lang="en">In short: a bigger window costs nothing by itself. What costs more is conversations that actually get longer.</span></p>
+
+    <div class="card mech">
+      <h3><span lang="zh">为什么会扣得更快</span><span lang="en">Why it uses more</span></h3>
+      <p><span lang="zh">Codex 每发一条消息，都会把当前对话里的内容一起交给模型。默认窗口较小，对话快满时 Codex 会自动压缩旧内容；窗口开大后，压缩来得更晚，每条消息带上的内容更多，所以每条消息消耗的额度也更多。</span><span lang="en">Every message Codex sends includes the conversation so far. With the default window, Codex compacts older content once the conversation nears the limit. With a bigger window, compaction happens later, each message carries more, and each message uses more.</span></p>
+    </div>
+
+    <div class="cost-grid">
+      <div class="card">
+        <span class="tag ok"><span lang="zh">用 ChatGPT 账号登录</span><span lang="en">Signed in with ChatGPT</span></span>
+        <h3><span lang="zh">订阅额度：不加价，但用得更快</span><span lang="en">Subscription: no surcharge, but faster drain</span></h3>
+        <ul>
+          <li lang="zh">官方说明：GPT-6.1 Sol 使用订阅额度时，在 Codex 和 ChatGPT Work 里<b>不收长上下文附加费</b>。</li>
+          <li lang="en">OpenAI: GPT-6.1 Sol usage drawn from your subscription has <b>no long-context surcharge</b> in Codex or ChatGPT Work.</li>
+          <li lang="zh">但每条消息的用量取决于模型、上下文、推理强度、工具调用、检索和缓存。上下文更长的会话，每条消息用得<b>明显更多</b>。</li>
+          <li lang="en">But each message's usage depends on the model, context, reasoning, tool use, retrieval and caching. Sessions holding more context use <b>significantly more</b> per message.</li>
+          <li lang="zh">每个插件（MCP 服务）都会给消息增加上下文，也会多用额度。</li>
+          <li lang="en">Every MCP server adds context to your messages and uses more of your limit.</li>
+          <li lang="zh">Fast 和 Ultrafast 模式按不同的倍率消耗额度。</li>
+          <li lang="en">Fast and Ultrafast modes draw on your limits at different rates.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag bad"><span lang="zh">用 API Key 登录</span><span lang="en">Signed in with an API key</span></span>
+        <h3><span lang="zh">按 token 计费：超过 272K 整次加价</span><span lang="en">Per-token billing: higher rate above 272K</span></h3>
+        <ul>
+          <li lang="zh">按 API 价格计费，和订阅额度分开算。</li>
+          <li lang="en">You pay API prices, separate from any subscription.</li>
+          <li lang="zh">单次请求输入<b>不超过 272K</b>：按标准价。</li>
+          <li lang="en">Requests with <b>up to 272K</b> input tokens: standard price.</li>
+          <li lang="zh">输入<b>超过 272K</b>：<b>整次请求</b>的输入和缓存按 <b>2 倍</b>、输出按 <b>1.5 倍</b>计价，不只是超出的那部分。</li>
+          <li lang="en">Requests with <b>more than 272K</b>: the <b>whole request</b> is billed at <b>2×</b> for input and cache and <b>1.5×</b> for output, not just the extra tokens.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tbl">
+      <table>
+        <thead><tr><th><span lang="zh">档位</span><span lang="en">Tier</span></th><th class="num"><span lang="zh">≤272K 输入 / 缓存 / 输出</span><span lang="en">≤272K input / cached / output</span></th><th class="num"><span lang="zh">&gt;272K 输入 / 缓存 / 输出</span><span lang="en">&gt;272K input / cached / output</span></th></tr></thead>
+        <tbody>
+          <tr><td><span lang="zh">标准</span><span lang="en">Standard</span></td><td class="num">$2 / $0.10 / $10</td><td class="num up">$4 / $0.20 / $15</td></tr>
+          <tr><td>Batch / Flex</td><td class="num">$1 / $0.05 / $5</td><td class="num up">$2 / $0.10 / $7.50</td></tr>
+          <tr><td>Fast</td><td class="num">$4 / $0.20 / $20</td><td class="num up">$8 / $0.40 / $30</td></tr>
+          <tr><td>Ultrafast</td><td class="num">$12 / $0.60 / $60</td><td class="num up">$24 / $1.20 / $90</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note"><span lang="zh">GPT-6.1 Sol 的 API 价格，单位是美元 / 每百万 tokens，来自 OpenAI 官方定价页。其他模型的价格请看官方定价页。</span><span lang="en">GPT-6.1 Sol API prices in USD per 1M tokens, from OpenAI's pricing page. See that page for other models.</span></p>
+
+    <div class="card example">
+      <h3><span lang="zh">算一笔账（API Key，标准档，GPT-6.1 Sol）</span><span lang="en">Worked example (API key, standard tier, GPT-6.1 Sol)</span></h3>
+      <p><span lang="zh">一次请求输入 260K、输出 5K：0.26 × $2 + 0.005 × $10 ≈ <b>$0.57</b></span><span lang="en">260K input, 5K output: 0.26 × $2 + 0.005 × $10 ≈ <b>$0.57</b></span></p>
+      <p><span lang="zh">一次请求输入 300K、输出 5K：0.3 × $4 + 0.005 × $15 ≈ <b>$1.28</b></span><span lang="en">300K input, 5K output: 0.3 × $4 + 0.005 × $15 ≈ <b>$1.28</b></span></p>
+      <p><span lang="zh">输入只多了约 15%，费用变成约 <b>2.2 倍</b>。这还没算缓存折扣，实际金额以账单为准。</span><span lang="en">About 15% more input costs about <b>2.2×</b> as much. Cache discounts are not included; your bill is what counts.</span></p>
+    </div>
+
+    <h2 style="margin-top:48px"><span lang="zh">值不值得开？优点和代价</span><span lang="en">Is it worth it? Pros and costs</span></h2>
+    <p class="section-lead"><span lang="zh">按你的使用场景来取舍。</span><span lang="en">Decide based on how you work.</span></p>
+    <div class="cost-grid">
+      <div class="card">
+        <span class="tag ok"><span lang="zh">优点</span><span lang="en">Pros</span></span>
+        <ul>
+          <li lang="zh">一次能读进更大的代码库和更多文档，不用反复喂资料</li>
+          <li lang="en">Read a bigger codebase and more docs at once, without re-feeding material</li>
+          <li lang="zh">长任务中途不容易触发自动压缩，前面的细节和决定不容易丢</li>
+          <li lang="en">Long tasks hit auto-compaction later, so earlier details and decisions are less likely to be lost</li>
+          <li lang="zh">跨很多文件的重构、排查问题时，AI 前后更连贯</li>
+          <li lang="en">More consistent work across many files, such as large refactors or debugging</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag bad"><span lang="zh">代价</span><span lang="en">Costs</span></span>
+        <ul>
+          <li lang="zh">对话越长，每条消息越贵，订阅额度更快用完</li>
+          <li lang="en">Longer conversations make every message cost more; your subscription limit runs out sooner</li>
+          <li lang="zh">用 API Key 时，单次超过 272K 整次加价，费用可能翻倍</li>
+          <li lang="en">With an API key, requests over 272K are billed at a higher rate for the whole request</li>
+          <li lang="zh">要处理的内容越多，回复通常越慢</li>
+          <li lang="en">More content to process usually means slower replies</li>
+          <li lang="zh">旧内容一直带着，AI 可能被早先无关的信息干扰</li>
+          <li lang="en">Old content stays in, which can distract the AI with earlier, unrelated details</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card mech">
+      <h3><span lang="zh">建议</span><span lang="en">Our suggestion</span></h3>
+      <p><span lang="zh">做大项目、长任务时开着；日常小问题多开新对话，不让上下文无谓地变长。不需要了，就对 AI 说"把 Codex 上下文恢复原样"。</span><span lang="en">Keep it on for big projects and long tasks. For everyday questions, start new conversations so context doesn't grow for nothing. When you no longer need it, tell your AI "restore my Codex context".</span></p>
+    </div>
+    <p class="sources"><span lang="zh">官方资料：</span><span lang="en">Official sources:</span>
+      <a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener">Codex Pricing</a> ·
+      <a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" target="_blank" rel="noopener">GPT-6.1 Sol</a> ·
+      <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">API Pricing</a></p>
   </div>
 </section>
 
@@ -268,8 +405,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <h2><span lang="zh">常见问题</span><span lang="en">FAQ</span></h2>
     <div>
       <details>
-        <summary><span lang="zh">为什么不是满 1M？</span><span lang="en">Why not the full 1M?</span></summary>
-        <p><span lang="zh">Codex 给每个模型设了上限（目前 Sol 是 872K），界面上还会留出约 5% 的余量，所以显示约 828K。这已经是 Codex 里能拿到的最大值。以后 OpenAI 放宽上限，再让 AI 调一次就行。</span><span lang="en">Codex caps each model (872K for Sol today) and keeps about 5% in reserve, so you see about 828K. That's the most Codex allows. If OpenAI raises the cap, just ask your AI to run it again.</span></p>
+        <summary><span lang="zh">为什么我看到的不到 1M？</span><span lang="en">Why do I see less than 1M?</span></summary>
+        <p><span lang="zh">Skill 写入的是 1M，但 Codex 会按 OpenAI 给你的账号和版本下发的模型上限截断（作者电脑上是 872K），界面上还会留出约 5% 的余量，所以作者看到的是约 828K。不同账号、不同版本的上限可能不同，你看到的数字也可能不同。以后 OpenAI 放宽上限，再让 AI 调一次就行。</span><span lang="en">The skill writes 1M, but Codex clamps it to the cap OpenAI sets for your account and version (872K on the author's machine) and keeps about 5% in reserve, so the author sees about 828K. Caps can differ between accounts and versions, so your number may differ too. If OpenAI raises the cap, just ask your AI to run it again.</span></p>
       </details>
       <details>
         <summary><span lang="zh">ChatGPT 网页版能用吗？</span><span lang="en">Does it work for ChatGPT on the web?</span></summary>
@@ -277,18 +414,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </details>
       <details>
         <summary><span lang="zh">会更耗额度吗？</span><span lang="en">Does it use more quota?</span></summary>
-        <p><span lang="zh">要看你在 Codex 里是怎么登录的。以下都来自 OpenAI 官方文档：</span><span lang="en">It depends on how you sign in to Codex. From OpenAI's official docs:</span></p>
-        <ul>
-          <li lang="zh"><b>用 ChatGPT 账号登录（订阅额度）</b>：官方明确说明，GPT-6.1 Sol 在 Codex 里使用订阅额度时<b>不收长上下文附加费</b>。但每条消息消耗多少额度，和上下文长度有关：对话越长、带的内容越多，每条消息用得就越多，额度会消耗得更快。</li>
-          <li lang="en"><b>Signed in with ChatGPT (subscription):</b> OpenAI says GPT-6.1 Sol usage drawn from your subscription has <b>no long-context surcharge</b> in Codex. But how much each message uses depends on context length: longer conversations use significantly more per message, so your limit runs down faster.</li>
-          <li lang="zh"><b>用 API Key 登录</b>：按 API 价格计费。单次输入超过 272K tokens 时，<b>整次请求</b>的输入和缓存按 2 倍、输出按 1.5 倍计价。以 GPT-6.1 Sol 为例，每百万 tokens 的输入从 $2 涨到 $4，缓存输入从 $0.10 涨到 $0.20，输出从 $10 涨到 $15。</li>
-          <li lang="en"><b>Signed in with an API key:</b> you pay API prices. When a request has more than 272K input tokens, the <b>whole request</b> is billed at 2× for input and cache and 1.5× for output. For GPT-6.1 Sol, per 1M tokens: input $2 → $4, cached input $0.10 → $0.20, output $10 → $15.</li>
-        </ul>
-        <p><span lang="zh">上下文调大以后，只有对话真的变长才会多用。平时用不到这么长的话，随时可以让 AI 恢复默认值。</span><span lang="en">A bigger window only costs more when conversations actually get that long, and you can ask your AI to restore the default at any time.</span></p>
-        <p><span lang="zh">官方资料：</span><span lang="en">Sources:</span>
-          <a href="https://learn.chatgpt.com/docs/pricing" target="_blank" rel="noopener">Codex Pricing</a> ·
-          <a href="https://developers.openai.com/api/docs/models/gpt-6.1-sol" target="_blank" rel="noopener">GPT-6.1 Sol</a> ·
-          <a href="https://developers.openai.com/api/docs/pricing" target="_blank" rel="noopener">API Pricing</a></p>
+        <p><span lang="zh">会。上下文开大后对话能变得更长，对话越长，每条消息消耗的额度越多；用 API Key 的话单次超过 272K 还会整次加价。详细的官方计费规则、算账示例和利弊，见上面的 <a href="#cost">额度说明</a>。</span><span lang="en">Yes. Conversations can grow longer, and longer conversations use more per message; with an API key, requests over 272K are also billed at a higher rate. See <a href="#cost">how OpenAI bills it</a> above for the official rules, a worked example and the trade-offs.</span></p>
       </details>
       <details>
         <summary><span lang="zh">重启后没变化？</span><span lang="en">No change after restarting?</span></summary>
