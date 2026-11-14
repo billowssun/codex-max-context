@@ -4,7 +4,11 @@
 
 官网：**https://codex.pddshop.cc** · [English](#english)
 
-**最快的用法**：复制一行命令运行即可，不用下载。
+**最简单的用法**：把这句话发给 Codex 或 Claude Code，它会自己装好 Skill 并完成设置。
+
+> 请阅读 https://codex.pddshop.cc/install.md ，按里面的步骤帮我安装 codex-max-context 这个 skill，然后用它把我的 Codex 上下文调到最大。
+
+想自己动手，也可以直接运行一行命令：
 
 ```powershell
 # Windows（PowerShell）
@@ -131,7 +135,11 @@ Raise the **OpenAI Codex** context window to the largest size Codex allows. Work
 
 GPT-6.1 Sol has a 1M context in the API, but Codex defaults to 500K and shows about 95% of that (~475K). This tool writes `model_context_window = 1000000` to `~/.codex/config.toml`. Codex clamps that to the model's own maximum (872K for Sol as of November 2026), so after a restart you get about **828K usable**. The real cap comes from `models_cache.json` on your machine. The script reads it every time, so you can rerun it if OpenAI raises the cap. ChatGPT web and mobile can't be changed this way.
 
-Website: **https://codex.pddshop.cc**. Quickest way, nothing to download:
+Website: **https://codex.pddshop.cc**. Easiest way: send this to Codex or Claude Code.
+
+> Read https://codex.pddshop.cc/install.md, install the codex-max-context skill as it describes, then use it to max out my Codex context window.
+
+Or run it yourself:
 
 ```powershell
 # Windows (PowerShell)

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Codex Max Context</title>
-<meta name="description" content="一条命令把 OpenAI Codex 的上下文窗口调到最大：GPT-6.1 Sol 从约 475K 提升到约 828K。支持 Windows、macOS、Linux，自动备份，一键还原。">
-<meta property="og:title" content="Codex Max Context：一条命令，Codex 上下文翻倍">
-<meta property="og:description" content="把 Codex 里 GPT-6.1 Sol 的可用上下文从约 475K 提升到约 828K。自动备份，一键还原。">
+<meta name="description" content="一个 Skill，让 Codex 里 GPT-6.1 Sol 的上下文从约 475K 提升到约 828K。复制一句话发给你的 AI，它会帮你装好并完成设置。">
+<meta property="og:title" content="Codex Max Context：一个 Skill，Codex 上下文翻倍">
+<meta property="og:description" content="复制一句话发给你的 AI，Codex 上下文从约 475K 提升到约 828K。自动备份，随时恢复。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://codex.pddshop.cc/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2310b981'/><path d='M8 22V10m5 12V14m5 8v-5m5 5V7' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
@@ -14,26 +14,25 @@
 :root{
   --bg:#f7f7f5;--surface:#ffffff;--surface-2:#f0f0ec;--ink:#16181b;--ink-2:#565b63;--ink-3:#8a8f97;
   --line:#e3e3de;--accent:#0e9f6e;--accent-ink:#ffffff;--accent-soft:#e3f6ee;--warn:#b7791f;
-  --bar-old:#c9ccd1;--code-bg:#16181b;--code-ink:#e8eaed;--shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);
+  --bar-old:#c9ccd1;--shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0f1113;--surface:#16191c;--surface-2:#1d2125;--ink:#eceef0;--ink-2:#a3a9b1;--ink-3:#737a83;
   --line:#2a2f35;--accent:#34d399;--accent-ink:#06281c;--accent-soft:#12352a;--warn:#f6c26b;
-  --bar-old:#3a4048;--code-bg:#0b0c0e;--code-ink:#e8eaed;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  --bar-old:#3a4048;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
 }}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif}
 html[data-lang="zh"] [lang="en"],html[data-lang="en"] [lang="zh"]{display:none!important}
 a{color:inherit}
-code,pre,.mono{font-family:ui-monospace,SFMono-Regular,"Cascadia Code",Menlo,Consolas,monospace}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:650;text-decoration:none;white-space:nowrap}
 .brand svg{flex:none}
 .nav-r{display:flex;align-items:center;gap:8px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;font-weight:550;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:15px;font-weight:550;text-decoration:none;cursor:pointer;white-space:nowrap}
 .btn:hover{border-color:var(--ink-3)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.primary:hover{filter:brightness(1.05)}
@@ -43,18 +42,15 @@ header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86
 h1{font-size:clamp(34px,5.4vw,54px);line-height:1.12;letter-spacing:-.02em;margin:18px 0 16px;font-weight:750}
 h1 .num{color:var(--accent);white-space:nowrap}
 .lead{font-size:18px;color:var(--ink-2);margin:0 0 28px;max-width:34em}
-.cmd{background:var(--code-bg);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
-.tabs{display:flex;gap:2px;padding:6px 6px 0;border-bottom:1px solid #2a2e33}
-.tab{background:none;border:0;color:#9aa0a8;font:inherit;font-size:14px;padding:8px 12px;border-radius:8px 8px 0 0;cursor:pointer}
-.tab[aria-selected="true"]{color:#fff;background:#23272c}
-.cmd-body{display:flex;align-items:flex-start;gap:12px;padding:16px}
-.cmd-body pre{margin:0;flex:1;min-width:0;color:var(--code-ink);font-size:14px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
-.cmd-body pre .p{color:#5eead4;user-select:none}
-.copy{flex:none;background:#2b3036;color:#e8eaed;border:0;border-radius:8px;height:32px;padding:0 12px;font:inherit;font-size:13px;cursor:pointer}
-.copy:hover{background:#353b42}
-.cmd-note{font-size:13px;color:var(--ink-3);margin:10px 2px 0}
-.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.prompt{padding:18px 18px 16px}
+.prompt-label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-3);margin-bottom:10px}
+.prompt-label .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.bubble{background:var(--accent-soft);border-radius:14px 14px 14px 4px;padding:14px 16px;font-size:16px;line-height:1.6;word-break:break-word}
+.prompt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.prompt-actions .hint{font-size:13px;color:var(--ink-3)}
+.alt{font-size:14px;color:var(--ink-2);margin:14px 2px 0}
+.alt a{color:var(--accent);font-weight:550}
 .meter{padding:24px}
 .meter h3{margin:0 0 4px;font-size:15px}
 .meter .sub{font-size:13px;color:var(--ink-3);margin:0 0 20px}
@@ -77,18 +73,15 @@ h2{font-size:28px;letter-spacing:-.01em;margin:0 0 8px}
 .step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent-soft);color:var(--accent);font-weight:700;margin-bottom:12px}
 .step h3{margin:0 0 6px;font-size:17px}
 .step p{margin:0;color:var(--ink-2);font-size:15px}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.app{padding:20px}
+.app h3{margin:0 0 6px;font-size:16px}
+.app p{margin:0;color:var(--ink-2);font-size:14px}
 .feat{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .feat .card{padding:20px}
 .feat h3{margin:0 0 6px;font-size:16px}
 .feat p{margin:0;color:var(--ink-2);font-size:14px}
-table{width:100%;border-collapse:collapse;font-size:15px}
-th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:13px;color:var(--ink-3);font-weight:600}
-tr:last-child td{border-bottom:0}
-td code{background:var(--surface-2);padding:2px 6px;border-radius:6px;font-size:13px;word-break:break-all}
-.tbl{overflow-x:auto}
-.ask{margin-top:16px;padding:16px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.ask q{font-weight:600}
+.feat q{font-weight:600;color:var(--ink)}
 details{border-bottom:1px solid var(--line);padding:4px 0}
 summary{cursor:pointer;padding:14px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
 summary::-webkit-details-marker{display:none}
@@ -96,13 +89,16 @@ summary::after{content:"+";color:var(--ink-3);font-weight:400;font-size:20px;lin
 details[open] summary::after{content:"−"}
 details p{margin:0 0 16px;color:var(--ink-2)}
 .note{border-left:3px solid var(--warn);padding:2px 0 2px 14px;color:var(--ink-2);font-size:14px;margin-top:20px}
+.cta-band{padding:36px;text-align:center}
+.cta-band h2{margin-bottom:6px}
+.cta-band p{color:var(--ink-2);margin:0 0 20px}
 footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--ink-3);font-size:13px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s}
 .toast.show{opacity:1;transform:translateX(-50%)}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;padding-top:44px;gap:32px}
-  .steps{grid-template-columns:1fr}
+  .steps,.apps{grid-template-columns:1fr}
   .feat{grid-template-columns:1fr 1fr}
 }
 @media (max-width:520px){
@@ -110,7 +106,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .feat{grid-template-columns:1fr}
   .nav .btn.gh span{display:none}
   .lead{font-size:16px}
-  th,td{padding:10px 10px}
+  .cta-band{padding:28px 18px}
 }
 @media (prefers-reduced-motion:reduce){.fill{transition:none}}
 </style>
@@ -137,32 +133,29 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div>
     <span class="eyebrow">Codex · GPT-6.1 Sol</span>
     <h1>
-      <span lang="zh">一条命令，Codex 上下文从 475K 到 <span class="num">828K</span></span>
-      <span lang="en">One command takes Codex from 475K to <span class="num">828K</span> context</span>
+      <span lang="zh">一个 Skill，Codex 上下文从 475K 到 <span class="num">828K</span></span>
+      <span lang="en">One skill takes Codex from 475K to <span class="num">828K</span> context</span>
     </h1>
     <p class="lead">
-      <span lang="zh">Sol 在 API 里有 1M 上下文，Codex 默认只给你一半左右。这个小工具会把它调到 Codex 允许的最大值，支持 Windows、macOS、Linux，改之前自动备份，随时一键还原。</span>
-      <span lang="en">Sol has a 1M context in the API, but Codex only gives you about half by default. This tool raises it to the largest size Codex allows, on Windows, macOS and Linux. It backs up your config first and can be undone with one command.</span>
+      <span lang="zh">Sol 本身支持 1M 上下文，Codex 默认只给一半左右。不用懂技术，把下面这句话发给你的 AI，它会自己装好 Skill 并帮你调到最大。</span>
+      <span lang="en">Sol supports a 1M context, but Codex only gives you about half by default. No technical steps: send the message below to your AI, and it installs the skill and raises the limit for you.</span>
     </p>
 
-    <div class="cmd" id="cmd">
-      <div class="tabs" role="tablist">
-        <button class="tab" role="tab" data-os="win" aria-selected="true">Windows</button>
-        <button class="tab" role="tab" data-os="unix" aria-selected="false">macOS / Linux</button>
-      </div>
-      <div class="cmd-body">
-        <pre id="cmdText"></pre>
-        <button class="copy" type="button" id="copyBtn"><span lang="zh">复制</span><span lang="en">Copy</span></button>
+    <div class="card prompt">
+      <div class="prompt-label"><span class="dot"></span><span lang="zh">复制这句话，发给 Codex 或 Claude Code</span><span lang="en">Copy this and send it to Codex or Claude Code</span></div>
+      <div class="bubble" id="promptText"></div>
+      <div class="prompt-actions">
+        <button class="btn primary" type="button" id="copyBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span lang="zh">复制这句话</span><span lang="en">Copy message</span>
+        </button>
+        <span class="hint"><span lang="zh">AI 请求权限时点"允许"就行</span><span lang="en">Click "Allow" if your AI asks for permission</span></span>
       </div>
     </div>
-    <p class="cmd-note" id="cmdNote"></p>
-
-    <div class="cta">
-      <a class="btn primary" href="https://github.com/billowssun/codex-max-context/releases/latest/download/codex-max-context.zip">
-        <span lang="zh">下载 Skill 安装包</span><span lang="en">Download the skill</span>
-      </a>
-      <a class="btn" href="#skill"><span lang="zh">让 AI 帮你装</span><span lang="en">Let your AI install it</span></a>
-    </div>
+    <p class="alt">
+      <span lang="zh">用 Claude 网页版或桌面版？<a href="https://github.com/billowssun/codex-max-context/releases/latest/download/codex-max-context.zip">下载 Skill 安装包</a>，在设置的 Skills 页面上传即可。</span>
+      <span lang="en">On Claude web or desktop? <a href="https://github.com/billowssun/codex-max-context/releases/latest/download/codex-max-context.zip">Download the skill</a> and upload it on the Skills page in Settings.</span>
+    </p>
   </div>
 
   <div class="card meter" aria-label="Context window comparison">
@@ -173,33 +166,33 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="track"><div class="fill old" data-w="47.5"></div></div>
     </div>
     <div class="row">
-      <div class="row-top"><span lang="zh">运行之后</span><span lang="en">After running</span><b style="color:var(--accent)">828K</b></div>
+      <div class="row-top"><span lang="zh">装上 Skill 之后</span><span lang="en">With the skill</span><b style="color:var(--accent)">828K</b></div>
       <div class="track"><div class="fill new" data-w="82.8"></div></div>
     </div>
     <div class="row">
-      <div class="row-top"><span lang="zh">API 理论上限</span><span lang="en">API ceiling</span><b style="color:var(--ink-3)">1M</b></div>
+      <div class="row-top"><span lang="zh">模型理论上限</span><span lang="en">Model ceiling</span><b style="color:var(--ink-3)">1M</b></div>
       <div class="track"><div class="fill api" data-w="100"></div></div>
     </div>
-    <div class="gain"><strong>+74%</strong><span lang="zh">多出约 35 万 tokens，可以装下更大的代码库和更长的会话</span><span lang="en">About 350K more tokens for bigger codebases and longer sessions</span></div>
+    <div class="gain"><strong>+74%</strong><span lang="zh">多出约 35 万 tokens，能读更大的项目，聊更久不断片</span><span lang="en">About 350K more tokens: bigger projects, longer sessions</span></div>
   </div>
 </div>
 
 <section>
   <div class="wrap">
     <h2><span lang="zh">三步搞定</span><span lang="en">Three steps</span></h2>
-    <p class="section-lead"><span lang="zh">整个过程不到一分钟。</span><span lang="en">The whole thing takes under a minute.</span></p>
+    <p class="section-lead"><span lang="zh">全程只需要复制、粘贴、重启。</span><span lang="en">Copy, paste, restart. That's it.</span></p>
     <div class="steps">
       <div class="card step">
-        <h3><span lang="zh">运行命令</span><span lang="en">Run the command</span></h3>
-        <p><span lang="zh">复制上面对应系统的命令，粘贴到 PowerShell 或终端里回车。它会显示改之前和改之后分别能用多少。</span><span lang="en">Paste the command for your OS into PowerShell or a terminal. It shows how much you can use before and after.</span></p>
+        <h3><span lang="zh">复制上面那句话</span><span lang="en">Copy the message</span></h3>
+        <p><span lang="zh">点一下"复制这句话"按钮。</span><span lang="en">Click "Copy message" above.</span></p>
       </div>
       <div class="card step">
-        <h3><span lang="zh">完全退出 Codex</span><span lang="en">Quit Codex completely</span></h3>
-        <p><span lang="zh">不是关掉窗口，而是从托盘或 Dock 里退出，然后重新打开。配置只在启动时读取。</span><span lang="en">Quit it from the tray or Dock, not just the window, then reopen it. Codex only reads its config at startup.</span></p>
+        <h3><span lang="zh">发给你的 AI</span><span lang="en">Send it to your AI</span></h3>
+        <p><span lang="zh">在 Codex 或 Claude Code 里粘贴发送。它会装好 Skill、完成设置，并告诉你调整后的大小。</span><span lang="en">Paste it into Codex or Claude Code. It installs the skill, makes the change, and tells you the new size.</span></p>
       </div>
       <div class="card step">
-        <h3><span lang="zh">开一个新对话</span><span lang="en">Start a new conversation</span></h3>
-        <p><span lang="zh">把鼠标放在上下文用量的圆圈上，应该能看到“共 828k”左右。旧对话保持原来的大小。</span><span lang="en">Hover the context meter and you should see about 828K. Existing conversations keep their old size.</span></p>
+        <h3><span lang="zh">重启 Codex</span><span lang="en">Restart Codex</span></h3>
+        <p><span lang="zh">完全退出 Codex 再打开，开一个新对话，就能看到约 828K 的上下文。</span><span lang="en">Quit Codex completely, reopen it and start a new conversation. You'll see about 828K.</span></p>
       </div>
     </div>
   </div>
@@ -207,53 +200,34 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section>
   <div class="wrap">
-    <h2><span lang="zh">放心用</span><span lang="en">Safe by design</span></h2>
-    <p class="section-lead"><span lang="zh">只改一行配置，其他什么都不碰。</span><span lang="en">It changes one line and leaves everything else alone.</span></p>
+    <h2><span lang="zh">支持的 AI</span><span lang="en">Works with</span></h2>
+    <p class="section-lead"><span lang="zh">只要你的 AI 支持 Skill，就能用。</span><span lang="en">Any AI assistant that supports skills.</span></p>
+    <div class="apps">
+      <div class="card app">
+        <h3>Codex</h3>
+        <p><span lang="zh">发送上面那句话即可，它会自己装好。</span><span lang="en">Send the message above; it installs itself.</span></p>
+      </div>
+      <div class="card app">
+        <h3>Claude Code</h3>
+        <p><span lang="zh">同样发送那句话，Windows、Mac、Linux 都能用。</span><span lang="en">Same message, on Windows, Mac or Linux.</span></p>
+      </div>
+      <div class="card app">
+        <h3><span lang="zh">Claude 网页版 / 桌面版</span><span lang="en">Claude web / desktop</span></h3>
+        <p><span lang="zh">下载安装包，在设置的 Skills 页面上传。</span><span lang="en">Download the zip and upload it in Settings → Skills.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span lang="zh">放心用</span><span lang="en">Worry-free</span></h2>
+    <p class="section-lead"><span lang="zh">只改一项设置，不碰其他任何东西。</span><span lang="en">It changes one setting and nothing else.</span></p>
     <div class="feat">
-      <div class="card"><h3><span lang="zh">自动备份</span><span lang="en">Automatic backup</span></h3><p><span lang="zh">每次修改前都保存一份 <code>config.toml.ctxbak-时间戳</code>。</span><span lang="en">Saves <code>config.toml.ctxbak-&lt;time&gt;</code> before every change.</span></p></div>
-      <div class="card"><h3><span lang="zh">一键还原</span><span lang="en">One-step undo</span></h3><p><span lang="zh">加上 <code>--restore</code> 就能回到上一次修改之前的状态。</span><span lang="en">Add <code>--restore</code> to go back to before the last change.</span></p></div>
-      <div class="card"><h3><span lang="zh">读取真实上限</span><span lang="en">Reads the real cap</span></h3><p><span lang="zh">从本机的 <code>models_cache.json</code> 读取模型上限，告诉你实际能拿到多少。</span><span lang="en">Reads the model's cap from your local <code>models_cache.json</code> and tells you what you'll actually get.</span></p></div>
-      <div class="card"><h3><span lang="zh">零依赖</span><span lang="en">No dependencies</span></h3><p><span lang="zh">Windows 只用 PowerShell，macOS 和 Linux 只用 bash 和 awk。</span><span lang="en">PowerShell on Windows; bash and awk on macOS and Linux.</span></p></div>
-    </div>
-  </div>
-</section>
-
-<section id="skill">
-  <div class="wrap">
-    <h2><span lang="zh">作为 Skill 安装</span><span lang="en">Install as a skill</span></h2>
-    <p class="section-lead"><span lang="zh">装好以后直接用一句话让 AI 助手去做，它会先检查、再修改、最后汇报结果。</span><span lang="en">Then just ask your AI assistant. It checks first, makes the change, and reports back.</span></p>
-    <div class="card tbl">
-      <table>
-        <thead><tr><th><span lang="zh">平台</span><span lang="en">Platform</span></th><th><span lang="zh">怎么装</span><span lang="en">How</span></th></tr></thead>
-        <tbody>
-          <tr><td>Codex</td><td><span lang="zh">解压到</span><span lang="en">Unzip to</span> <code>~/.codex/skills/codex-max-context/</code></td></tr>
-          <tr><td>Claude Code</td><td><span lang="zh">解压到</span><span lang="en">Unzip to</span> <code>~/.claude/skills/codex-max-context/</code></td></tr>
-          <tr><td>Claude.ai / Claude Desktop</td><td><span lang="zh">在设置里的 Skills 页面上传 zip</span><span lang="en">Upload the zip on the Skills page in Settings</span></td></tr>
-          <tr><td><span lang="zh">其他支持 SKILL.md 的 Agent</span><span lang="en">Other SKILL.md agents</span></td><td><span lang="zh">放进它的 skills 目录</span><span lang="en">Put the folder in its skills directory</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card ask">
-      <span lang="zh">然后对它说：<q>帮我把 Codex 的上下文调到最大</q></span>
-      <span lang="en">Then say: <q>Max out my Codex context window</q></span>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2><span lang="zh">更多选项</span><span lang="en">Options</span></h2>
-    <p class="section-lead"><span lang="zh">追加在命令后面即可。</span><span lang="en">Append to the command.</span></p>
-    <div class="card tbl">
-      <table>
-        <thead><tr><th><span lang="zh">想做什么</span><span lang="en">To</span></th><th>Windows</th><th>macOS / Linux</th></tr></thead>
-        <tbody>
-          <tr><td><span lang="zh">只看现状，不修改</span><span lang="en">Check, change nothing</span></td><td><code>-Status</code></td><td><code>--status</code></td></tr>
-          <tr><td><span lang="zh">预览会改什么</span><span lang="en">Preview</span></td><td><code>-DryRun</code></td><td><code>--dry-run</code></td></tr>
-          <tr><td><span lang="zh">自定义数值</span><span lang="en">Custom value</span></td><td><code>-Value 600000</code></td><td><code>--value 600000</code></td></tr>
-          <tr><td><span lang="zh">还原上一次修改</span><span lang="en">Undo last change</span></td><td><code>-Restore</code></td><td><code>--restore</code></td></tr>
-        </tbody>
-      </table>
+      <div class="card"><h3><span lang="zh">自动备份</span><span lang="en">Automatic backup</span></h3><p><span lang="zh">修改之前先备份原来的设置。</span><span lang="en">Your original settings are saved first.</span></p></div>
+      <div class="card"><h3><span lang="zh">一句话恢复</span><span lang="en">Undo in one sentence</span></h3><p><span lang="zh">对 AI 说 <q>把 Codex 上下文恢复原样</q> 就能撤销。</span><span lang="en">Say <q>restore my Codex context</q> to undo.</span></p></div>
+      <div class="card"><h3><span lang="zh">数字实打实</span><span lang="en">Real numbers</span></h3><p><span lang="zh">按你电脑上 Codex 的实际上限来调，改完直接告诉你能用多少。</span><span lang="en">It uses Codex's actual limit on your machine and tells you the result.</span></p></div>
+      <div class="card"><h3><span lang="zh">开源免费</span><span lang="en">Free and open source</span></h3><p><span lang="zh">代码全部公开在 GitHub，MIT 协议。</span><span lang="en">All code is on GitHub under the MIT license.</span></p></div>
     </div>
   </div>
 </section>
@@ -264,26 +238,32 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div>
       <details>
         <summary><span lang="zh">为什么不是满 1M？</span><span lang="en">Why not the full 1M?</span></summary>
-        <p><span lang="zh">Codex 会把设置限制在模型自身的上限内（目前 Sol 是 872K），界面上再扣掉约 5% 的预留，所以显示约 828K。想用满 1M 只能直接调用 API。以后 OpenAI 提高上限，重新运行一次就能拿到新的上限。</span><span lang="en">Codex caps the setting at the model's own maximum (872K for Sol today) and shows about 95% of it, so you see about 828K. The full 1M is only available through the API. If OpenAI raises the cap, just run the command again.</span></p>
+        <p><span lang="zh">Codex 给每个模型设了上限（目前 Sol 是 872K），界面上还会留出约 5% 的余量，所以显示约 828K。这已经是 Codex 里能拿到的最大值。以后 OpenAI 放宽上限，再让 AI 调一次就行。</span><span lang="en">Codex caps each model (872K for Sol today) and keeps about 5% in reserve, so you see about 828K. That's the most Codex allows. If OpenAI raises the cap, just ask your AI to run it again.</span></p>
       </details>
       <details>
-        <summary><span lang="zh">对 ChatGPT 网页版有用吗？</span><span lang="en">Does it work for ChatGPT on the web?</span></summary>
-        <p><span lang="zh">没用。它只对 Codex 生效（桌面 App、CLI、IDE 插件）。ChatGPT 网页版和手机 App 没有本地设置可以改。</span><span lang="en">No. It only affects Codex (desktop app, CLI, IDE extensions). ChatGPT on the web and mobile has no local setting for this.</span></p>
+        <summary><span lang="zh">ChatGPT 网页版能用吗？</span><span lang="en">Does it work for ChatGPT on the web?</span></summary>
+        <p><span lang="zh">不能。它只对 Codex 生效，包括桌面 App、命令行和编辑器插件。</span><span lang="en">No. It only affects Codex: the desktop app, CLI and editor extensions.</span></p>
       </details>
       <details>
         <summary><span lang="zh">会更耗额度吗？</span><span lang="en">Does it use more quota?</span></summary>
-        <p><span lang="zh">会。上下文越长，每次请求发送的内容越多，消耗的额度也越多。走 API 的话，输入超过 272K 后单价更高。</span><span lang="en">Yes. A longer context sends more tokens with every request. On the API, input above 272K tokens is billed at a higher rate.</span></p>
+        <p><span lang="zh">会。对话越长，每次发送的内容越多，额度消耗也越快。平时不需要这么长的话，随时可以恢复。</span><span lang="en">Yes. Longer conversations send more with every request. You can restore the default at any time.</span></p>
       </details>
       <details>
-        <summary><span lang="zh">重启后数字没变？</span><span lang="en">Nothing changed after restarting?</span></summary>
-        <p><span lang="zh">确认 Codex 真的完全退出了（Windows 上检查系统托盘），并且是在新对话里看的。再检查一下有没有用某个 profile 或 <code>-c model_context_window=...</code> 覆盖了这个值。</span><span lang="en">Make sure Codex fully quit (check the system tray on Windows) and that you're looking at a new conversation. Also check that a profile or a <code>-c model_context_window=...</code> flag isn't overriding it.</span></p>
-      </details>
-      <details>
-        <summary><span lang="zh">直接运行网上的脚本安全吗？</span><span lang="en">Is it safe to run a script from the web?</span></summary>
-        <p><span lang="zh">脚本完全开源，不到 200 行，只读写 <code>~/.codex/config.toml</code>，不联网也不上传任何东西。不放心的话可以先在 GitHub 上看源码，或者下载下来先加 <code>--dry-run</code> 预览。</span><span lang="en">The script is open source and under 200 lines. It only touches <code>~/.codex/config.toml</code> and never goes online. Read it on GitHub first, or download it and run with <code>--dry-run</code>.</span></p>
+        <summary><span lang="zh">重启后没变化？</span><span lang="en">No change after restarting?</span></summary>
+        <p><span lang="zh">确认 Codex 是完全退出后再打开的（Windows 上记得看一下右下角托盘），并且是在新对话里查看。旧对话会保持原来的大小。</span><span lang="en">Make sure Codex fully quit before reopening (check the system tray on Windows) and look at a new conversation. Old ones keep their size.</span></p>
       </details>
     </div>
-    <p class="note"><span lang="zh">本项目与 OpenAI 无关。上限数值来自 2026 年 11 月 Codex 下发的模型信息，以你电脑上脚本的实际输出为准。</span><span lang="en">Not affiliated with OpenAI. Limits reflect the model info Codex shipped in November 2026; trust what the script prints on your machine.</span></p>
+    <p class="note"><span lang="zh">本项目与 OpenAI 无关。数值来自 2026 年 11 月的 Codex，实际以 AI 告诉你的结果为准。</span><span lang="en">Not affiliated with OpenAI. Numbers reflect Codex as of November 2026; your AI will tell you the actual result.</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="card cta-band">
+      <h2><span lang="zh">现在就试试</span><span lang="en">Try it now</span></h2>
+      <p><span lang="zh">复制一句话，剩下的交给 AI。</span><span lang="en">Copy one message and let your AI do the rest.</span></p>
+      <button class="btn primary" type="button" id="copyBtn2"><span lang="zh">复制这句话</span><span lang="en">Copy message</span></button>
+    </div>
   </div>
 </section>
 </main>
@@ -298,57 +278,37 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <script>
 (function(){
-  var ORIGIN = 'https://codex.pddshop.cc';
-  var CMDS = {
-    win:  { text: '& ([scriptblock]::Create((irm ' + ORIGIN + '/set-context.ps1)))',
-            zh: '在 PowerShell 里运行。只想看看现状，就在命令末尾加上 -Status。',
-            en: 'Run in PowerShell. Add -Status at the end to only check.' },
-    unix: { text: 'curl -fsSL ' + ORIGIN + '/set-context.sh | bash',
-            zh: '在终端里运行。只想看看现状，就把末尾的 bash 换成 bash -s -- --status。',
-            en: 'Run in a terminal. To only check, replace the final bash with bash -s -- --status.' }
+  var PROMPTS = {
+    zh: '请阅读 https://codex.pddshop.cc/install.md ，按里面的步骤帮我安装 codex-max-context 这个 skill，然后用它把我的 Codex 上下文调到最大。',
+    en: 'Read https://codex.pddshop.cc/install.md, install the codex-max-context skill as it describes, then use it to max out my Codex context window.'
   };
-  var root = document.documentElement, os, lang;
+  var root = document.documentElement, lang;
   function store(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
   function load(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
-
-  function setLang(l){
-    lang = l; root.setAttribute('data-lang', l); root.lang = l === 'zh' ? 'zh-CN' : 'en';
-    document.title = 'Codex Max Context';
-    renderCmd(); store('lang', l);
-  }
-  function renderCmd(){
-    var c = CMDS[os];
-    document.getElementById('cmdText').innerHTML = '<span class="p">' + (os === 'win' ? 'PS&gt; ' : '$ ') + '</span>' + c.text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-    document.getElementById('cmdNote').textContent = c[lang];
-  }
-  function setOS(o){
-    os = o;
-    document.querySelectorAll('.tab').forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.os === o)); });
-    renderCmd();
-  }
   function toast(msg){
     var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
     clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove('show'); }, 1600);
   }
-
-  document.querySelectorAll('.tab').forEach(function(t){ t.addEventListener('click', function(){ setOS(t.dataset.os); }); });
-  document.getElementById('langBtn').addEventListener('click', function(){ setLang(lang === 'zh' ? 'en' : 'zh'); });
-  document.getElementById('copyBtn').addEventListener('click', function(){
-    var text = CMDS[os].text, ok = lang === 'zh' ? '已复制' : 'Copied';
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(function(){ toast(ok); }, function(){ fallback(); });
-    } else { fallback(); }
+  function setLang(l){
+    lang = l; root.setAttribute('data-lang', l); root.lang = l === 'zh' ? 'zh-CN' : 'en';
+    document.getElementById('promptText').textContent = PROMPTS[l];
+    store('lang', l);
+  }
+  function copy(){
+    var text = PROMPTS[lang], ok = lang === 'zh' ? '已复制，去发给你的 AI 吧' : 'Copied. Now send it to your AI';
     function fallback(){
-      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); toast(ok); } catch(e) {} document.body.removeChild(ta);
     }
-  });
-
-  var ua = navigator.userAgent || '';
-  setOS(/Mac|Linux|X11|CrOS/.test(ua) && !/Windows/.test(ua) ? 'unix' : 'win');
+    if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(function(){ toast(ok); }, fallback); }
+    else { fallback(); }
+  }
+  document.getElementById('copyBtn').addEventListener('click', copy);
+  document.getElementById('copyBtn2').addEventListener('click', copy);
+  document.getElementById('langBtn').addEventListener('click', function(){ setLang(lang === 'zh' ? 'en' : 'zh'); });
   var saved = load('lang');
   setLang(saved || (/^zh/i.test(navigator.language || 'zh') ? 'zh' : 'en'));
-
   requestAnimationFrame(function(){ requestAnimationFrame(function(){
     document.querySelectorAll('.fill').forEach(function(f){ f.style.width = f.dataset.w + '%'; });
   }); });
