@@ -112,8 +112,15 @@ Usable after restart: 828400 (~828K)
 **为什么不是满 1M？**
 Codex 会把这个值限制在模型的最大值以内（目前 Sol 是 872K），界面上再扣掉约 5% 的预留。想用满 1M 只能直接走 API。
 
+**只对 Sol 有效吗？**
+不是。这项设置对 Codex 里的所有模型都生效。根据 2026 年 11 月 14 日 Codex 下发的模型列表，GPT-6.1 Sol、GPT-6.1 Terra、GPT-6 Astra/Sol/Luna、GPT-5.6 Sol/Terra/Luna 在 Codex 里的上限都是 872K，所以调整后都能用到约 828K。其中 GPT-6.1 的两个模型默认约 475K，其余默认约 258K，提升到原来的 3.2 倍。
+
 **会多花钱或多耗额度吗？**
-会。上下文越长，每次请求发送的 token 越多，消耗的额度也越多。走 API 的话，输入超过 272K 后单价更高。
+要看你在 Codex 里怎么登录：
+- **用 ChatGPT 账号登录（订阅额度）**：OpenAI 官方说明，GPT-6.1 Sol 在 Codex 里使用订阅额度时不收长上下文附加费。但上下文越长，每条消息消耗的额度越多，额度会用得更快。
+- **用 API Key 登录**：按 API 价格计费。单次输入超过 272K tokens 时，整次请求的输入和缓存按 2 倍、输出按 1.5 倍计价。以 GPT-6.1 Sol 为例，每百万 tokens 的输入从 $2 涨到 $4，缓存输入从 $0.10 涨到 $0.20，输出从 $10 涨到 $15。
+
+官方资料：[Codex Pricing](https://learn.chatgpt.com/docs/pricing) · [GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) · [API Pricing](https://developers.openai.com/api/docs/pricing)
 
 **会不会把我的配置改坏？**
 脚本只改 `config.toml` 最顶层的 `model_context_window` 这一行，其他内容原样保留。每次改之前都会备份成 `config.toml.ctxbak-时间戳`，用 `--restore` 就能还原。`models_cache.json` 只读不写。
@@ -167,7 +174,9 @@ bash ./scripts/set-context.sh
 
 Options: `--status`, `--dry-run`, `--value N`, `--model SLUG`, `--restore` (PowerShell: `-Status`, `-DryRun`, `-Value`, `-Model`, `-Restore`).
 
-Afterwards, **quit Codex completely**, reopen it and **start a new conversation**. A longer context uses more quota per request.
+Afterwards, **quit Codex completely**, reopen it and **start a new conversation**.
+
+It works for every model in Codex, not just Sol. As of Codex's model list from 14 November 2026, all listed models are capped at 872K in Codex (about 828K usable). Signed in with ChatGPT, OpenAI applies no long-context surcharge to GPT-6.1 Sol subscription usage in Codex, but longer contexts use more of your limit per message. With an API key, requests over 272K input tokens are billed at 2× input and cache and 1.5× output for the whole request. See [Codex Pricing](https://learn.chatgpt.com/docs/pricing) and [API Pricing](https://developers.openai.com/api/docs/pricing).
 
 ## License
 
