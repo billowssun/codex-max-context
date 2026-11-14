@@ -26,6 +26,10 @@ Both scripts take the same options:
 
 The config lives in `$CODEX_HOME` if that is set, otherwise in `~/.codex`. The scripts only edit top-level `model_context_window` lines in `config.toml` and leave everything else as it is, including `[profiles.*]` sections. Before each write they save a backup named `config.toml.ctxbak-<timestamp>`.
 
+## Scope
+
+Change **only** `model_context_window`. Don't touch `model`, reasoning effort, providers, plugins, profiles or any other setting, and don't edit `config.toml` by hand. Use the scripts, which make only this change. If the user asks for anything beyond the context window, treat it as a separate request.
+
 ## Steps
 
 1. **Pick the script for the OS.** `<skill-dir>` is the folder this file is in.

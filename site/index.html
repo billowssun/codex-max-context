@@ -173,16 +173,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div>
     <span class="eyebrow"><span lang="zh">Codex · 所有模型适用</span><span lang="en">Codex · Every model</span></span>
     <h1>
-      <span lang="zh">一个 Skill，Codex 上下文最高开到 <span class="num">1M</span></span>
-      <span lang="en">One skill unlocks up to <span class="num">1M</span> context in Codex</span>
+      <span lang="zh">一个 Skill，让你的 Codex 记忆力提升<span class="num">至少 70%</span></span>
+      <span lang="en">One skill gives your Codex <span class="num">70%+</span> more memory</span>
     </h1>
     <p class="lead">
-      <span lang="zh">模型本身支持 1M 上下文，Codex 默认只给一半左右。不用懂技术，把下面这句话发给你的 AI，它会自己装好 Skill 并帮你调到最大。</span>
-      <span lang="en">The models support a 1M context, but Codex only gives you about half by default. No technical steps: send the message below to your AI, and it installs the skill and raises the limit for you.</span>
+      <span lang="zh">GPT-6.1、GPT-6、GPT-5.6 这些模型，官方都支持 1M 上下文。可到了 Codex 里，默认只给一半，有的只剩四分之一，用起来处处受限。把下面这句话发给你的 AI，它会自己装好 Skill，把上下文调到最大。</span>
+      <span lang="en">GPT-6.1, GPT-6 and GPT-5.6 all officially support a 1M context. In Codex, you get half of that by default, and for some models only a quarter. Send the message below to your AI, and it installs the skill and raises the limit to the max.</span>
     </p>
 
     <div class="card prompt">
-      <div class="prompt-label"><span class="dot"></span><span lang="zh">复制这句话，发给 Codex 或 Claude Code</span><span lang="en">Copy this and send it to Codex or Claude Code</span></div>
+      <div class="prompt-label"><span class="dot"></span><span lang="zh">复制这句话，发给你现在正在使用的 AI 工具（记得使用工作模式）</span><span lang="en">Copy this and send it to the AI tool you're using (make sure it's in work/agent mode)</span></div>
       <div class="bubble" id="promptText"></div>
       <div class="prompt-actions">
         <button class="btn primary" type="button" id="copyBtn">
@@ -231,6 +231,34 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section>
   <div class="wrap">
+    <h2><span lang="zh">上下文太短，有多痛？</span><span lang="en">What a short context costs you</span></h2>
+    <p class="section-lead"><span lang="zh">官方支持 1M，Codex 默认只给 272K 到 500K。窗口一满，Codex 就会自动压缩旧对话，问题就来了：</span><span lang="en">The models support 1M, but Codex defaults to 272K–500K. Once the window fills up, Codex compacts older conversation, and that's where it hurts:</span></p>
+    <div class="apps">
+      <div class="card app"><h3><span lang="zh">聊着聊着就"失忆"</span><span lang="en">It forgets mid-conversation</span></h3><p><span lang="zh">对话一长，前面说好的需求、定下的方案就被压缩掉，AI 像换了个人。</span><span lang="en">Requirements and decisions from earlier get compacted away, and the AI acts like a different person.</span></p></div>
+      <div class="card app"><h3><span lang="zh">大项目读不全</span><span lang="en">Big projects don't fit</span></h3><p><span lang="zh">一次只能看一部分文件，改了这里忘了那里，越改越乱。</span><span lang="en">It only sees part of the code, fixes one place and breaks another.</span></p></div>
+      <div class="card app"><h3><span lang="zh">同样的话说好几遍</span><span lang="en">Repeating yourself</span></h3><p><span lang="zh">项目背景、代码规范、踩过的坑，要一遍遍重新交代。</span><span lang="en">Background, conventions and past pitfalls have to be explained again and again.</span></p></div>
+      <div class="card app"><h3><span lang="zh">长任务做到一半跑偏</span><span lang="en">Long tasks drift</span></h3><p><span lang="zh">压缩后丢了进度，重复做已经做过的事，甚至推翻之前的决定。</span><span lang="en">After compaction it loses track, redoes finished work, or reverses earlier decisions.</span></p></div>
+      <div class="card app"><h3><span lang="zh">被迫频繁开新对话</span><span lang="en">Constant fresh starts</span></h3><p><span lang="zh">刚进入状态就得重开，思路一次次被打断。</span><span lang="en">Just as it gets going, you have to start over.</span></p></div>
+      <div class="card app"><h3><span lang="zh">看起来"变笨了"</span><span lang="en">It seems "dumber"</span></h3><p><span lang="zh">不是模型不行，是它能看到的东西太少。</span><span lang="en">The model isn't worse; it just can't see enough.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span lang="zh">原理：只改一项设置</span><span lang="en">How it works: one setting</span></h2>
+    <p class="section-lead"><span lang="zh">不破解、不改模型，只是把 Codex 自己提供的一项设置调到最大。</span><span lang="en">No hacks, no model changes. It just raises a setting Codex already provides.</span></p>
+    <div class="feat">
+      <div class="card"><h3><span lang="zh">1. 默认值很保守</span><span lang="en">1. Conservative default</span></h3><p><span lang="zh">Codex 有一项"上下文窗口"设置。不设置时，GPT-6.1 系列默认 500K，其他模型默认 272K。</span><span lang="en">Codex has a context window setting. Left unset, the GPT-6.1 models default to 500K and the others to 272K.</span></p></div>
+      <div class="card"><h3><span lang="zh">2. 设成 1M</span><span lang="en">2. Set it to 1M</span></h3><p><span lang="zh">Skill 把这一项设成 1M，而且写在全局位置，所有模型都生效，换模型不用重设。</span><span lang="en">The skill sets it to 1M at the top level, so it applies to every model, even after you switch.</span></p></div>
+      <div class="card"><h3><span lang="zh">3. 取能给的最大值</span><span lang="en">3. Take the max allowed</span></h3><p><span lang="zh">Codex 会在每个模型允许的范围内取最大值（目前常见是 872K），界面再显示其中约 95%。</span><span lang="en">Codex uses the most each model allows (commonly 872K today) and shows about 95% of it.</span></p></div>
+      <div class="card"><h3><span lang="zh">4. 其他什么都不动</span><span lang="en">4. Nothing else changes</span></h3><p><span lang="zh">默认模型、推理强度、插件、登录方式全部保持原样。改之前自动备份，随时可以恢复。</span><span lang="en">Your default model, reasoning effort, plugins and sign-in stay as they are. A backup is made first, and you can restore any time.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <h2><span lang="zh">三步搞定</span><span lang="en">Three steps</span></h2>
     <p class="section-lead"><span lang="zh">全程只需要复制、粘贴、重启。</span><span lang="en">Copy, paste, restart. That's it.</span></p>
     <div class="steps">
@@ -240,7 +268,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
       <div class="card step">
         <h3><span lang="zh">发给你的 AI</span><span lang="en">Send it to your AI</span></h3>
-        <p><span lang="zh">在 Codex 或 Claude Code 里粘贴发送。它会装好 Skill、完成设置，并告诉你调整后的大小。</span><span lang="en">Paste it into Codex or Claude Code. It installs the skill, makes the change, and tells you the new size.</span></p>
+        <p><span lang="zh">在你正在用的 AI 工具里粘贴发送（记得用工作模式）。它会装好 Skill、完成设置，并告诉你调整后的大小。</span><span lang="en">Paste it into the AI tool you use (in work/agent mode). It installs the skill, makes the change, and tells you the new size.</span></p>
       </div>
       <div class="card step">
         <h3><span lang="zh">重启 Codex</span><span lang="en">Restart Codex</span></h3>
@@ -277,11 +305,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="section-lead"><span lang="zh">这项设置对 Codex 里的所有模型都生效。默认只给 272K 的模型，提升最明显。</span><span lang="en">The setting applies to every model in Codex. Models that default to 272K gain the most.</span></p>
     <div class="card tbl">
       <table>
-        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">实际看到大约</span><span lang="en">Actually see: about</span></th></tr></thead>
+        <thead><tr><th><span lang="zh">模型</span><span lang="en">Model</span></th><th class="num"><span lang="zh">官方支持</span><span lang="en">Official</span></th><th class="num"><span lang="zh">默认可用</span><span lang="en">Default</span></th><th class="num"><span lang="zh">装上 Skill 后</span><span lang="en">With the skill</span></th><th class="num"><span lang="zh">实际看到大约</span><span lang="en">Actually see: about</span></th></tr></thead>
         <tbody>
-          <tr><td><b>GPT-6.1</b><span class="variants">Sol · Terra</span></td><td class="num">475K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
-          <tr><td><b>GPT-6</b><span class="variants">Astra · Sol · Luna</span></td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
-          <tr><td><b>GPT-5.6</b><span class="variants">Sol · Terra · Luna</span></td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
+          <tr><td><b>GPT-6.1</b><span class="variants">Sol · Terra</span></td><td class="num">1M</td><td class="num">475K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
+          <tr><td><b>GPT-6</b><span class="variants">Astra · Sol · Luna</span></td><td class="num">1M</td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
+          <tr><td><b>GPT-5.6</b><span class="variants">Sol · Terra · Luna</span></td><td class="num">1M</td><td class="num">258K</td><td class="num up"><span lang="zh">最高 </span><span lang="en">up to </span>1M*</td><td class="num">828K</td></tr>
         </tbody>
       </table>
     </div>
