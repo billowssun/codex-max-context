@@ -24,7 +24,7 @@ Both scripts take the same options:
 | Look up limits for another model | `-Model SLUG` | `--model SLUG` |
 | Undo the most recent change | `-Restore` | `--restore` |
 
-The config lives in `$CODEX_HOME` if that is set, otherwise in `~/.codex`. The scripts only edit top-level `model_context_window` lines in `config.toml` and leave everything else as it is, including `[profiles.*]` sections. Before each write they save a backup named `config.toml.ctxbak-<timestamp>`.
+The config lives in `$CODEX_HOME` if that is set, otherwise in `~/.codex`. The scripts only edit top-level `model_context_window` lines in `config.toml` and leave everything else as it is, including `[profiles.*]` sections. Before each actual change they save a field-level undo record in `config.toml.ctxundo-<timestamp>-<sequence>/`. Repeating the same value is a no-op.
 
 ## Scope
 
@@ -47,7 +47,7 @@ Change **only** `model_context_window`. Don't touch `model`, reasoning effort, p
    - next steps: **quit Codex completely** (not just close the window; on Windows also check the system tray), reopen it, and **start a new conversation**. Existing conversations keep their old size.
    - cost: a longer context means each request uses more quota. On the API, input over 272K tokens is billed at a higher rate.
 
-5. **Undo.** If the user wants to go back, run it with `--restore` / `-Restore`. That restores the newest `ctxbak` backup and deletes it, so running it again steps back one more change.
+5. **Undo.** If the user wants to go back, run it with `--restore` / `-Restore`. That restores only the context key from the newest safe undo record, preserving unrelated current settings. Repeated changes undo in reverse order. If the context key has changed independently, the script refuses with a conflict and leaves files untouched. An initially absent config is removed only if undo leaves no other content. Legacy `ctxbak` backups are not automatically restored; review them manually and restore only the context key.
 
 ## Troubleshooting
 

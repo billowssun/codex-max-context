@@ -3,14 +3,13 @@
 # macOS / Linux / WSL / Git Bash. Needs only bash + awk (no jq, no python).
 # Edits only the top-level `model_context_window` key in $CODEX_HOME/config.toml
 # (default ~/.codex/config.toml) and backs the file up first as
-# config.toml.ctxbak-<timestamp>. models_cache.json is only read.
+# a field-level config.toml.ctxundo-* record. models_cache.json is only read.
 set -euo pipefail
 
 VALUE=1000000
 MODEL=""
 MODE=set
 DRY=0
-PREFIX="config.toml.ctxbak-"
 
 usage() {
   cat <<'EOF'
@@ -43,6 +42,22 @@ case "$VALUE" in ''|*[!0-9]*) die "--value must be a whole number, got '$VALUE'"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 CFG="$CODEX_HOME/config.toml"
 CACHE="$CODEX_HOME/models_cache.json"
+
+lock=""
+tmp=""
+cleanup() {
+  [ -z "$tmp" ] || rm -f "$tmp" "$tmp.line"
+  [ -z "$lock" ] || rmdir "$lock" 2>/dev/null || true
+}
+trap cleanup EXIT
+if [ "$MODE" != status ] && [ "$DRY" = 0 ]; then
+  mkdir -p "$CODEX_HOME"
+  lock="$CODEX_HOME/config.toml.ctxlock"
+  if ! mkdir "$lock" 2>/dev/null; then
+    lock=""
+    die "Another context operation is running (config.toml.ctxlock exists). If a previous run crashed, inspect it before removing the stale lock."
+  fi
+fi
 
 # Value of a key that sits before the first [section] header.
 toplevel_get() {
@@ -98,21 +113,57 @@ else
 fi
 
 [ "$MODE" = status ] && exit 0
+# Refuse ambiguous keys rather than creating an undo record that cannot restore them.
+if [ -f "$CFG" ]; then
+  awk '
+    /^[[:space:]]*\[/ { exit }
+    /^[[:space:]]*model_context_window[[:space:]]*=/ {
+      n++; v=$0; sub(/^[^=]*=[[:space:]]*/, "", v); sub(/[[:space:]]*#.*$/, "", v); sub(/[[:space:]]*$/, "", v)
+      if (v !~ /^[0-9]+(_[0-9]+)*$/) bad=1
+    }
+    END {exit (n>1 || bad)}' "$CFG" || die "Duplicate or unsupported context value; resolve it manually first."
+fi
+CURRENT="$(printf '%s' "$CURRENT" | tr -d '_[:space:]')"
 
+# Undo records are separate from legacy whole-file backups. Never source metadata.
+UNDO_PREFIX="config.toml.ctxundo-"
 if [ "$MODE" = restore ]; then
-  latest="$(ls -1 "$CODEX_HOME"/"$PREFIX"* 2>/dev/null | sort | tail -n 1 || true)"
-  if [ -z "$latest" ]; then echo; echo "No backup ($PREFIX*) found in $CODEX_HOME. Nothing to restore."; exit 1; fi
-  if [ "$DRY" = 1 ]; then echo; echo "[dry run] Would restore $latest"; exit 0; fi
-  cat "$latest" > "$CFG"
-  rm -f "$latest"
-  echo; echo "Restored config.toml from $(basename "$latest")."
-  echo "Quit Codex completely and reopen it for this to take effect."
+  latest="$(find "$CODEX_HOME" -maxdepth 1 -type d -name "$UNDO_PREFIX*" 2>/dev/null | sort | tail -n 1 || true)"
+  [ -n "$latest" ] || die "No safe undo record found. Legacy ctxbak files must be reviewed manually; restore only model_context_window, not the whole file."
+  [ -f "$latest/before" ] && [ -f "$latest/applied" ] && [ -f "$latest/existed" ] || die "Incomplete undo record: $latest"
+  expected="$(cat "$latest/applied")"
+  existed="$(cat "$latest/existed")"
+  case "$expected" in ''|*[!0-9]*) die "Invalid undo record" ;; esac
+  case "$existed" in 0|1) ;; *) die "Invalid undo record" ;; esac
+  [ "$CURRENT" = "$expected" ] || die "Conflict: model_context_window changed since installation. No files changed; review the current value and undo record."
+  [ "$DRY" = 0 ] || { echo "[dry run] Would undo only model_context_window using $latest"; exit 0; }
+  oldline="$(awk '/^[[:space:]]*\[/ {exit} /^[[:space:]]*model_context_window[[:space:]]*=/ {print; exit}' "$latest/before")"
+  tmp="$(mktemp "${TMPDIR:-/tmp}/codex-ctx.XXXXXX")"
+  # Pass the original line through a file, not awk -v (which interprets escapes).
+  printf '%s\n' "$oldline" > "$tmp.line"
+  awk 'NR==FNR { old=$0; next }
+       /^[[:space:]]*\[/ {sec=1}
+       !sec && /^[[:space:]]*model_context_window[[:space:]]*=/ {if (old!="") print old; next}
+       {print}' "$tmp.line" "$CFG" > "$tmp"
+  if [ "$existed" = 0 ] && [ ! -s "$tmp" ]; then
+    rm -f "$CFG"
+  else
+    cat "$tmp" > "$CFG"
+  fi
+  rm -f "$latest/before" "$latest/applied" "$latest/existed"
+  rmdir "$latest"
+  echo "Restored only model_context_window; other settings preserved."
+  exit 0
+fi
+
+# Reinstalling the same value does not obscure the original undo state.
+if [ "$CURRENT" = "$VALUE" ]; then
+  echo "Already set to $VALUE; nothing changed."
   exit 0
 fi
 
 NEWLINE="model_context_window = $VALUE"
 tmp="$(mktemp "${TMPDIR:-/tmp}/codex-ctx.XXXXXX")"
-trap 'rm -f "$tmp"' EXIT
 
 if [ -s "$CFG" ]; then
   # Drop top-level model_context_window lines; insert the new one after `model =`.
@@ -144,12 +195,25 @@ if [ "$DRY" = 1 ]; then
 fi
 
 mkdir -p "$CODEX_HOME"
-backup=""
+# Collision-free, sortable records, also understood by the PowerShell script.
+stamp="$(date +%Y%m%d-%H%M%S)"
+sequence=0
+while :; do
+  record="$CODEX_HOME/$UNDO_PREFIX$stamp-$(printf '%06d' "$sequence")"
+  if (umask 077; mkdir "$record") 2>/dev/null; then break; fi
+  sequence=$((sequence + 1))
+  [ "$sequence" -lt 1000000 ] || die "Could not allocate undo record"
+done
 if [ -f "$CFG" ]; then
-  backup="$CODEX_HOME/$PREFIX$(date +%Y%m%d-%H%M%S)"
-  cp -p "$CFG" "$backup"
+  cp -p "$CFG" "$record/before"
+  printf '1\n' > "$record/existed"
+else
+  : > "$record/before"
+  printf '0\n' > "$record/existed"
 fi
+printf '%s\n' "$VALUE" > "$record/applied"
 cat "$tmp" > "$CFG"
+backup="$record"
 
 echo; echo "Done: $NEWLINE"
 [ -n "$backup" ] && echo "Backup              : $backup"
