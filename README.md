@@ -123,7 +123,7 @@ Codex 会把这个值限制在模型的最大值以内（目前 Sol 是 872K）�
 官方资料：[Codex Pricing](https://learn.chatgpt.com/docs/pricing) · [GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol) · [API Pricing](https://developers.openai.com/api/docs/pricing)
 
 **会不会把我的配置改坏？**
-脚本只改 `config.toml` 最顶层的 `model_context_window` 这一行，其他内容原样保留。每次改之前都会备份成 `config.toml.ctxbak-时间戳`，用 `--restore` 就能还原。`models_cache.json` 只读不写。
+脚本只改 `config.toml` 最顶层的 `model_context_window` 这一行，其他内容原样保留。每次实际修改前会记录原值到 `config.toml.ctxundo-时间戳-序号/`，用 `--restore` 只还原上下文这一项，保留之后对其他设置的修改。重复设置相同值不会新增记录；不同值可按后进先出的顺序撤销。如果这一项已被手动更改，恢复会报冲突并保持文件不变。原先没有配置文件时，撤销会删除脚本添加的项，仅当文件没有其他内容时删除文件。旧版 `ctxbak` 整文件备份不会自动覆盖当前配置，请手动核对并仅还原上下文项。`models_cache.json` 只读不写。
 
 **重启后没变化？**
 确认 Codex 真的完全退出了，并且是在新对话里看的。再检查一下有没有用 `-c model_context_window=...` 或某个 profile 覆盖了这个值。
@@ -181,3 +181,26 @@ It works for every model in Codex, not just Sol. As of Codex's model list from 1
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+
+## Regression tests / 回归测试
+
+No test dependencies beyond Python 3 and the script shell. Tests use isolated
+temporary `CODEX_HOME` directories, never your real Codex configuration.
+
+```sh
+python -m unittest discover -s tests -v
+CONTEXT_SHELL=pwsh python -m unittest discover -s tests -v
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:CONTEXT_SHELL = 'powershell'
+python -m unittest discover -s tests -v
+```
+
+Both scripts share undo records and a `config.toml.ctxlock` directory lock.
+If a process crashes and leaves the lock, confirm no context script is running
+before removing the lock directory. Undo refuses conflicting edits to the
+context key; it never silently rolls back unrelated settings.
